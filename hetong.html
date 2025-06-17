@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合同基本信息生成器</title>
+    <link rel="stylesheet" href="hetong.css">
+</head>
+<body>
+    <div class="container">
+      <h2>合同基本信息生成器</h2>
+  
+      <!-- 合作类型 -->
+      <div class="form-group">
+        <label>合作类型</label>
+        <select id="kolType" onchange="updateFormVisibility()">
+          <option value="KOL">KOL</option>
+          <option value="KOC">KOC</option>
+          <option value="KOL_HYBRID">KOL（强商单＋伪原生）</option>
+        </select>
+      </div>
+  
+      <!-- 达人信息 -->
+      <div class="form-group">
+        <label>达人名称</label>
+        <input type="text" id="kolName" placeholder="填写达人名称">
+      </div>
+  
+      <!-- 发布平台 -->
+      <div class="form-group">
+        <label>发布平台（可多选）</label>
+        <div class="platform-options">
+          <label><input type="checkbox" name="platforms" value="YouTube"> YouTube</label>
+          <label><input type="checkbox" name="platforms" value="Instagram"> Instagram</label>
+          <label><input type="checkbox" name="platforms" value="TikTok"> TikTok</label>
+          <label><input type="checkbox" name="platforms" value="Facebook"> Facebook</label>
+          <label><input type="checkbox" name="platforms" value="Snapchat"> Snapchat</label>
+          <label><input type="checkbox" name="platforms" value="X"> X</label>
+          <label><input type="checkbox" name="platforms" value="VKontakte"> VKontakte</label>
+          <label><input type="checkbox" name="platforms" value="Telegram"> Telegram</label>
+          <label><input type="checkbox" name="platforms" value="Kwai"> Kwai</label>
+        </div>
+      </div>
+      
+      <!-- 履行状态 -->
+      <div class="form-group">
+        <label>履行状态</label>
+        <select id="signType" onchange="updateFormVisibility()">
+          <option value="">请选择履行状态</option>
+          <option value="W">未履行/正在履行</option>
+          <option value="Y">已履行完毕</option>
+        </select>
+      </div>
+      
+      
+      <!-- 履行时间 (动态生成选项) -->
+      <div class="form-group" id="fulfillmentTimeContainer" style="display: none;">
+        <label>履行时间</label>
+        <select id="fulfillmentTime" onchange="updateFormVisibility()">
+           <!-- JS will populate these options -->
+        </select>
+      </div>
+
+      <!-- 所有的日期/月份选择器 -->
+      <div id="datePickers">
+          <div class="form-group" id="datePicker_S" style="display: none;">
+            <label>具体日期</label>
+            <input type="date" id="date_S">
+          </div>
+          <div class="form-group" id="datePicker_SM" style="display: none;">
+            <label>具体月份</label>
+            <input type="month" id="date_SM">
+          </div>
+          <div class="form-group" id="datePicker_MD" style="display: none;">
+            <label>日期区间</label>
+            <input type="date" id="date_MD_start"> 到
+            <input type="date" id="date_MD_end">
+          </div>
+          <div class="form-group" id="datePicker_MM" style="display: none;">
+            <label>月份区间</label>
+            <input type="month" id="date_MM_start"> 到
+            <input type="month" id="date_MM_end">
+          </div>
+      </div>
+
+      <!-- Wrapper for NORMAL (KOL/KOC) video fields -->
+      <div id="normalVideoFields" style="display: none;">
+          <div class="form-group">
+            <label>单支视频金额 ($)</label>
+            <input type="number" id="price" placeholder="请输入金额">
+          </div>
+          <div class="form-group" id="videoCountField">
+            <label>合同签约支数</label>
+            <input type="text" id="videoCount" placeholder="请输入支数">
+          </div>
+          <div class="form-group" id="releaseCountField" style="display: none;">
+            <label>实际上线视频数量</label>
+            <input type="text" id="releaseCount" placeholder="请输入支数">
+          </div>
+      </div>
+
+      <!-- Wrapper for KOL_HYBRID video fields -->
+      <div id="kolHybridVideoFields" style="display: none;">
+          <div class="form-group">
+              <label>强商单单支价格 ($)</label>
+              <input type="number" id="strongCommercialPrice" placeholder="请输入强商单单价">
+          </div>
+          <div class="form-group" id="strongCommercialCountField">
+              <label>强商单签约支数</label>
+              <input type="text" id="strongCommercialCount" placeholder="请输入强商单签约数量">
+          </div>
+          <div class="form-group" id="strongCommercialReleaseCountField" style="display: none;">
+              <label>强商单上线支数</label>
+              <input type="text" id="strongCommercialReleaseCount" placeholder="请输入强商单实际上线数量">
+          </div>
+          <hr>
+          <div class="form-group">
+              <label>伪原生单支价格 ($)</label>
+              <input type="number" id="pseudoNativePrice" placeholder="请输入伪原生单价">
+          </div>
+          <div class="form-group" id="pseudoNativeCountField">
+              <label>伪原生签约支数</label>
+              <input type="text" id="pseudoNativeCount" placeholder="请输入伪原生签约数量">
+          </div>
+          <div class="form-group" id="pseudoNativeReleaseCountField" style="display: none;">
+              <label>伪原生上线支数</label>
+              <input type="text" id="pseudoNativeReleaseCount" placeholder="请输入伪原生实际上线数量">
+          </div>
+      </div>
+    
+      <!-- 内容保留期限 -->
+      <div class="form-group">
+        <label>内容保留期限</label>
+        <select id="contentRetention">
+          <option value="永久">永久</option>
+          <option value="10年">10年</option>
+          <option value="5年">5年</option>
+          <option value="3年">3年</option>
+          <option value="2年">2年</option>
+        </select>
+      </div>
+  
+      <!-- 付款条件 -->
+      <div class="form-group">
+        <label>付款方式</label>
+        <select id="paymentMethod">
+          <option value="PayPal转账，手续费对方承担，预先扣除2%">PayPal转账，手续费对方承担，预先扣除2%</option>
+          <option value="银行转账，手续费共同承担">银行转账，手续费共同承担</option>
+          <option value="银行转账，手续费我方承担">银行转账，手续费我方承担</option>
+        </select>
+      </div>
+  
+      <!-- 账期 -->
+      <div class="form-group">
+        <label>账期</label>
+        <select id="netTerm" onchange="toggleNetFields()">
+          <option value="Net 30">Net 30</option>
+          <option value="Net 15">Net 15</option>
+          <option value="Net 7">Net 7</option>
+          <option value="prepayment">预付</option>
+        </select>
+      </div>
+  
+      <div class="form-group" id="prepaymentField" style="display: none;">
+        <label class="prepayment-label">视频批准后支付总额的
+        <input class="prepayment-input" type="text" id="prepaymentPercent" placeholder="比例">%，发布
+        <input class="prepayment-input" type="text" id="prepaymentDays" placeholder="天数">天后支付剩余部分
+        </label>
+      </div>
+  
+      <!-- 奖励机制 -->
+      <div class="form-group">
+        <label>奖励机制</label>
+        <select id="bonus">
+          <option value="">无</option>
+          <option value="有">有</option>
+        </select>
+      </div>
+  
+      <!-- 修改条款 -->
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="modifyCheck" onchange="toggleModifyText()"> 修改条款
+        </label>
+      </div>
+  
+      <div class="form-group" id="modifyTextContainer" style="display: none;">
+        <label>填写修改条款</label>
+        <textarea id="modifyText" placeholder="请输入修改条款"></textarea>
+      </div>
+  
+      <!-- 生成合同按钮 -->
+      <button class="btn" onclick="generateText()">生成内容</button>
+      <button class="btn" onclick="copyToClipboard()">复制内容</button>
+  
+      <h3>生成合同</h3>
+      <textarea id="output" readonly></textarea>
+    </div>
+  
+    <script src="hetong.js"></script>
+</body>
+</html>

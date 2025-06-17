@@ -1,0 +1,206 @@
+/* 🌟 页面整体布局 */
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8; /* 更柔和的背景色 */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+  }
+  
+  /* 🌟 容器 */
+  .container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+  }
+  
+  /* 🌟 每个表单项增加间距 */
+  .form-group {
+    margin-bottom: 20px; /* 增加上下间隔 */
+    text-align: left;
+  }
+  
+  /* 🌟 标签 */
+  label {
+    font-weight: bold;
+    font-size: 18px; /* 增大字体 */
+    display: block;
+    margin-bottom: 6px;
+  }
+  
+  /* 🌟 输入框 & 选择框 */
+  input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  /* 🌟 prepayment-label */
+  .prepayment-label {
+    font-weight: normal;
+    font-size: 18px; /* 增大字体 */
+    display: block;
+    margin-bottom: 6px;
+  }
+  
+  /* 🌟 prepayment-class */
+  .prepayment-input {
+    width: 10%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    background: #fff;
+  }
+  
+  /* 🌟 复选框样式优化 */
+  input[type="checkbox"] {
+    appearance: none;
+    width: 10px; /* 缩小尺寸 */
+    height: 10px;
+    border-radius: 4px;
+    border: 2px solid #007bff;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  input[type="checkbox"]:checked {
+    background: #007bff;
+  }
+  
+  input[type="checkbox"]:checked::before {
+    content: "✔";
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* 🌟 平台选择 */
+  .platform-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .platform-options label {
+    background: #f0f4f8;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+  }
+  
+  .platform-options label:hover {
+    background: #e3f2fd;
+  }
+  
+  /* 🌟 预计上线时间输入框组 */
+  #estimatedMonthsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* 🌟 让 “生成合同” 和 “复制合同” 按钮并排 */
+  .btn-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  /* 🌟 按钮 */
+  .btn {
+    background: #007bff;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+    flex: 1; /* 让两个按钮等宽 */
+  }
+  
+  .btn:hover {
+    background: #0056b3;
+  }
+  
+  /* 🌟 生成合同文本区域 */
+  textarea {
+    width: 100%;
+    height: 150px;
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    color: #333;
+    resize: vertical;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+  
+  /* 🌟 移动端适配 */
+  @media screen and (max-width: 480px) {
+    .container {
+      width: 100%;
+      padding: 20px;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    label {
+      font-size: 16px;
+    }
+    input, select, textarea {
+      font-size: 14px;
+      padding: 10px;
+    }
+    .btn {
+      font-size: 14px;
+      padding: 10px;
+    }
+    .btn-container {
+      flex-direction: column;
+    }
+  }
+  
