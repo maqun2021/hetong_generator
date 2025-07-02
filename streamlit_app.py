@@ -100,7 +100,7 @@ else:
 def generate_contract_summary(row):
     """生成合同基本内容概括 - 使用中文字段"""
     try:
-        kol_name = str(row.get('Name', '')).strip()
+        kol_name = str(row.get('Party B Name', '')).strip()
         nickname = str(row.get('nickname', '')).strip()
         platform = str(row.get('Platform', '')).strip()
         video_rate = str(row.get('Video Rate', '')).strip()
@@ -146,7 +146,7 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
     contract_files = []
     
     # 找到最后一个有效Name的索引
-    last_valid_index = df['Name'].apply(lambda x: str(x).strip() != '').to_numpy().nonzero()[0]
+    last_valid_index = df['Party B Name'].apply(lambda x: str(x).strip() != '').to_numpy().nonzero()[0]
     if len(last_valid_index) > 0:
         last_valid_index = last_valid_index[-1]
     else:
@@ -155,12 +155,12 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
     with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED) as zip_file:
         # 只遍历第3行到最后一个有效数据行
         for index, row in df.iloc[2:last_valid_index+1].iterrows():
-            name_value = row['Name'] if 'Name' in row else ''
+            name_value = row['Party B Name'] if 'Party B Name' in row else ''
             if str(name_value).strip() == "":
                 continue  # 跳过空行
             
             try:
-                safe_name = str(row['Name']).replace(" ", "_").replace("/", "-")
+                safe_name = str(row['Party B Name']).replace(" ", "_").replace("/", "-")
                 
                 # 生成合同文件
                 if generate_contracts:
@@ -176,7 +176,7 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                         'your_name': row['Your Name'],
                         'your_email': row['Your Email'],
                         'your_other_contact': row['Your Contact'],
-                        'Influencer_name': row['Name'],
+                        'Influencer_name': row['Party B Name'],
                         'Influencer_email': row['Email'],
                         'Influencer_contact': "N/A" if pd.isna(row['Contact']) or str(row['Contact']).strip() == "" else row['Contact'],
                         'Influencer_address': row['Address'],
@@ -211,7 +211,7 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                 if generate_summaries:
                     summary = generate_contract_summary(row)
                     summaries.append({
-                        'name': str(row['Name']).strip(),
+                        'name': str(row['Party B Name']).strip(),
                         'summary': summary,
                         'filename': f'Summary_{safe_name}_{today}.txt'
                     })
@@ -230,7 +230,7 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                         zip_file.writestr(summary_filename, summary)
                 
             except Exception as e:
-                st.error(f"❌ Error processing {row.get('Name', f'Row {index}')} (row {index}): {e}")
+                st.error(f"❌ Error processing {row.get('Party B Name', f'Row {index}')} (row {index}): {e}")
     
     # 如果需要合并输出，创建合并的概括文件
     if generate_summaries and output_mode == "合并文件" and summaries:
