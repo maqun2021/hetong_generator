@@ -216,7 +216,10 @@ function generateText() {
 		if (signType === 'Y') {
 			text += `，实际上线数量为 ${getEl(ELEMENT_IDS.pseudoNativeReleaseCount).value} 支`;
 		}
-		text += `，上线时间为 `;
+		
+		const timePrefix = signType === 'Y' ? '实际上线时间为' : '计划上线时间为';
+		text += `，${timePrefix} `;
+
 		if (fulfillmentTimeType === 'S') {
 			text += `${getEl(ELEMENT_IDS.date_S).value}。\n`;
 		} else if (fulfillmentTimeType === 'SM') {
@@ -231,16 +234,22 @@ function generateText() {
 		if (signType === 'Y') {
 			text += `，实际上线视频数量为 ${getEl(ELEMENT_IDS.releaseCount).value} 支`;
 		}
+
+		const timePrefix = signType === 'Y' ? '实际上线' : '计划上线';
+        const isRange = fulfillmentTimeType === 'MD' || fulfillmentTimeType === 'MM';
+        const timeWord = isRange ? '时间段' : '时间';
+		let timeClause = '';
+
 		if (fulfillmentTimeType === 'S') {
-			text += `，视频上线时间为 ${getEl(ELEMENT_IDS.date_S).value}。`;
+			timeClause = `，视频${timePrefix}${timeWord}为 ${getEl(ELEMENT_IDS.date_S).value}。`;
 		} else if (fulfillmentTimeType === 'SM') {
-			text += `，视频上线时间为 ${getEl(ELEMENT_IDS.date_SM).value.replace('-', '年')}月。`;
+			timeClause = `，视频${timePrefix}${timeWord}为 ${getEl(ELEMENT_IDS.date_SM).value.replace('-', '年')}月。`;
 		} else if (fulfillmentTimeType === 'MD') {
-			text += `，视频计划上线时间段为 ${getEl(ELEMENT_IDS.date_MD_start).value} - ${getEl(ELEMENT_IDS.date_MD_end).value}。`;
+			timeClause = `，视频${timePrefix}${timeWord}为 ${getEl(ELEMENT_IDS.date_MD_start).value} - ${getEl(ELEMENT_IDS.date_MD_end).value}。`;
 		} else if (fulfillmentTimeType === 'MM') {
-			text += `，视频计划上线时间段为 ${getEl(ELEMENT_IDS.date_MM_start).value.replace('-', '年')}月 - ${getEl(ELEMENT_IDS.date_MM_end).value.replace('-', '年')}月。`;
+			timeClause = `，视频${timePrefix}${timeWord}为 ${getEl(ELEMENT_IDS.date_MM_start).value.replace('-', '年')}月 - ${getEl(ELEMENT_IDS.date_MM_end).value.replace('-', '年')}月。`;
 		}
-		text += "\n";
+		text += timeClause + "\n";
 	}
 
 	// 3. 奖励机制
