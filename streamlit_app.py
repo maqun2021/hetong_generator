@@ -1,3 +1,5 @@
+
+
 import pandas as pd
 from docxtpl import DocxTemplate
 from datetime import date
@@ -101,7 +103,7 @@ def generate_contract_summary(row):
     """生成合同基本内容概括 - 使用中文字段"""
     try:
         kol_name = str(row.get('Party B Name', '')).strip()
-        nickname = str(row.get('nickname', '')).strip()
+        nickname = str(row.get('Main Platform nickname', '')).strip()
         platform = str(row.get('Platform', '')).strip()
         video_rate = str(row.get('Video Rate', '')).strip()
         video_number = str(row.get('Estimated Videos', '')).strip()
@@ -127,11 +129,11 @@ def generate_contract_summary(row):
 
         koc_display_name = nickname if nickname else kol_name
 
-        # 根据statement判断履行状态
+        # 根据statement判断履行状态，选择不同的时间表述
         if statement == "已履行完毕":
             line2 = f"2. 单支视频金额${video_rate_clean}，签约 {video_number} 期视频，实际上线视频数量为 {actual_video_number} 支，视频上线时间为 {promotion_date}。"
         else:
-            line2 = f"2. 单支视频金额${video_rate_clean}，签约 {video_number} 期视频，视频上线时间为 {promotion_date}。"
+            line2 = f"2. 单支视频金额${video_rate_clean}，签约 {video_number} 期视频，视频预计上线时间为 {promotion_date}。"
         
         summary = f'''合作事项：\n1. 海外KOC（{koc_display_name}），发布平台{platforms}。\n{line2}{bonus_text}\n\n权利义务：(重点highlight)\n1. 未经甲方同意，乙方不得删除视频，内容永久保留，否则支付甲方50%的费用。\n2. 乙方发布未经批准/错误版本视频，甲方可以选择补偿方式（删除重发、另行协商补偿、终止合作拒绝付款）。\n\n付款条件：\n{payment_text}'''
         return summary
@@ -173,9 +175,7 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                         is_video_rate_empty = str(video_rate_value).strip() == ""
                     
                     context = {
-                        'your_name': row['Your Name'],
-                        'your_email': row['Your Email'],
-                        'your_other_contact': row['Your Contact'],
+                    
                         'Influencer_name': row['Party B Name'],
                         'Influencer_email': row['Email'],
                         'Influencer_contact': "N/A" if pd.isna(row['Contact']) or str(row['Contact']).strip() == "" else row['Contact'],
@@ -193,12 +193,8 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                     }
                     template.render(context)
                     
-                    nickname = str(row.get('nickname', '')).strip()
-                    # 合同文件命名
-                    if nickname:
-                        contract_filename = f'FW-ARETIS_{name_value}_{nickname}_{today}.docx'
-                    else:
-                        contract_filename = f'FW-ARETIS_{name_value}_{today}.docx'
+                    # 合同文件命名 - 统一格式，不包含nickname
+                    contract_filename = f'FW-ARETIS_{name_value}_{today}.docx'
                     contract_files.append(contract_filename)
                     
                     doc_stream = io.BytesIO()
@@ -216,14 +212,9 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                         'filename': f'Summary_{safe_name}_{today}.txt'
                     })
                     
-                    nickname = str(row.get('nickname', '')).strip()
-                    # 概括文件命名
-                    if nickname and name_value:
-                        summary_filename = f'Summary_{name_value}_{nickname}_{today}.txt'
-                    elif nickname:
-                        summary_filename = f'Summary_{nickname}_{today}.txt'
-                    else:
-                        summary_filename = f'Summary_{name_value}_{today}.txt'
+                    nickname = str(row.get('Main Platform nickname', '')).strip()
+                    # 概括文件命名 - 统一格式
+                    summary_filename = f'{name_value}_{nickname}_summary.txt'
                     
                     # 根据输出模式保存概括文件
                     if output_mode in ["配对输出", "单独文件"]:
