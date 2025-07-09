@@ -242,7 +242,11 @@ if uploaded_csv and uploaded_template and generate:
         st.warning("请至少选择一个生成选项！")
     else:
         st.success("✅ Files uploaded successfully!")
-        df = pd.read_csv(uploaded_csv, keep_default_na=False, dtype=str)
+        try:
+            df = pd.read_csv(uploaded_csv, encoding='utf-8', keep_default_na=False, dtype=str)
+        except UnicodeDecodeError:
+            uploaded_csv.seek(0)
+            df = pd.read_csv(uploaded_csv, encoding='gbk', keep_default_na=False, dtype=str)
         df.columns = df.columns.str.strip()
         
         # 显示处理进度
