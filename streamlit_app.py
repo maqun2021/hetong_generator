@@ -1,5 +1,3 @@
-
-
 import pandas as pd
 from docxtpl import DocxTemplate
 from datetime import date
@@ -143,6 +141,7 @@ def generate_contract_summary(row):
 def process_data(df, uploaded_template, generate_contracts, generate_summaries, output_mode):
     """处理数据并生成文件 - 精确配对输出"""
     today = date.today().isoformat()
+    current_month = date.today().strftime("%Y-%m")  # 只获取年月格式
     zip_buffer = io.BytesIO()
     summaries = []
     contract_files = []
@@ -193,8 +192,8 @@ def process_data(df, uploaded_template, generate_contracts, generate_summaries, 
                     }
                     template.render(context)
                     
-                    # 合同文件命名 - 统一格式，不包含nickname
-                    contract_filename = f'FW-ARETIS_{name_value}_{today}.docx'
+                    # 合同文件命名 - 新格式：FW-ARETIS & Party B Name_YYYY-MM
+                    contract_filename = f'FW-ARETIS & {name_value}_{current_month}.docx'
                     contract_files.append(contract_filename)
                     
                     doc_stream = io.BytesIO()
